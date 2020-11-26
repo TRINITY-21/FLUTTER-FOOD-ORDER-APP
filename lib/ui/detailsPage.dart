@@ -1,3 +1,6 @@
+import 'package:ange/api/foodModel.dart';
+import 'package:ange/api/listModel.dart';
+import 'package:ange/ui/networkHandler/network_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,11 +20,34 @@ class _DetailsPageState extends State<DetailsPage> {
   var netPrice = 1;
   var quantity = 1;
 
+
+bool isLoaded = false;
+
+  NetworkHandler networkHandler = NetworkHandler();
+  FoodModel foodModel = FoodModel();
+  ListModel fmodel = ListModel();
+
+  recommendedFoods() async {
+    final food = await networkHandler.get('/api/book/books');
+
+    setState(() {
+      fmodel = ListModel.fromJson(food);
+      isLoaded = true;
+      print(fmodel.book);
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    recommendedFoods();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: ListView(
+      body: widget.heroTag != null? ListView(
         children: [
           Padding(
               padding: EdgeInsets.all(15.0),
@@ -73,15 +99,15 @@ class _DetailsPageState extends State<DetailsPage> {
           Padding(
             padding: const EdgeInsets.only(left: 15.0),
             child: Text(
-              widget.foodName,
+              "Buy",
               style: GoogleFonts.notoSans(
-                  fontWeight: FontWeight.w800, fontSize: 27),
+                  fontWeight: FontWeight.w800, color:Colors.red,fontSize: 27),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 15.0),
             child: Text(
-              "BEEF BURGER",
+              widget.foodName,
               style: GoogleFonts.notoSans(
                   fontWeight: FontWeight.w800, fontSize: 27),
             ),
@@ -97,7 +123,7 @@ class _DetailsPageState extends State<DetailsPage> {
                     width: 200.0,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage(widget.imgPath),
+                        image: NetworkHandler().getImage(widget.imgPath),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -246,7 +272,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       style: GoogleFonts.notoSans(
                           color: Color(0xFFFFFFFF),
                           fontWeight: FontWeight.w400,
-                          fontSize: 15.0),
+                          fontSize: 16.0),
                     ),
                   ],
                 ),
@@ -261,102 +287,197 @@ class _DetailsPageState extends State<DetailsPage> {
                   fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ),
-          Container(
-              height: 225,
+          // Container(
+          //     height: 225,
+          //     width: MediaQuery.of(context).size.width,
+              // child: ListView(
+              //   scrollDirection: Axis.horizontal,
+              //   children: [
+              //     _buildListItem('1'),
+              //     _buildListItem('2'),
+              //   ],
+              // ))
+
+
+               Container(
+                       height: 150,
               width: MediaQuery.of(context).size.width,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  _buildListItem('1'),
-                  _buildListItem('2'),
-                ],
-              ))
+                  child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: fmodel.book.length,
+                      itemBuilder: (BuildContext context, index) {
+                        FoodModel _food = fmodel.book[index];
+                        return Padding(
+                            padding: EdgeInsets.only(left: 15),
+                            child: InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => DetailsPage(
+                                              imgPath: _food.filePath,
+                                              foodName: _food.title,
+                                              pricePerItem:
+                                                  _food.price.toString(),
+                                              heroTag: _food.title)));
+                                },
+                                child: Container(
+                                    height: 130.0,
+                                    width: 130.0,
+                                    decoration: BoxDecoration(
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.3),
+                                          blurRadius: 6.0,
+                                          spreadRadius: 4.0,
+                                          offset: Offset(0.0, 3.0),
+                                        ),
+                                      ],
+                                      color: Color(0xFFF588D1),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Hero(
+                                          tag: _food.title,
+                                          child: Container(
+                                              height: 75.0,
+                                              width: 75.0,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Center(
+                                                  child: CircleAvatar(
+                                                      backgroundImage:networkHandler.getImage(_food.filePath)
+                                              )))),
+                                        
+                                        SizedBox(height: 15.0),
+                                        Text(
+                                          _food.title,
+                                          style: GoogleFonts.notoSans(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 17,
+                                            color: Color(0xFF075046),
+                                          ),
+                                        ),
+                                        Text(
+                                          '\GHC' + _food.price.toString(),
+                                          style: GoogleFonts.notoSans(
+                                            fontWeight: FontWeight.w800,
+                                            fontSize: 12,
+                                            color: Color(0xFFC70F0F),
+                                          ),
+                                        ),
+                                      ],
+                                    ))));
+                      }
+
+                      //  children: [
+                      //   _buildListItem('Hamburg', 'assets/19.jpg', '21',
+                      //       Color(0xFFC6E7FE), Color(0xFF04243B)),
+                      //   _buildListItem('Chips', 'assets/21.png', '30', Color(0xFFDCE964),
+                      //       Color(0xFF6A8CAA)),
+                      //   _buildListItem('Donuts', 'assets/20.png', '10', Color(0xFFD7FADA),
+                      //       Color(0xFF56CC7E)),
+                      //  _buildListItem('Pear', 'assets/19.jpg', '10', Color(0xFFADFF4F),
+                      //       Color(0xFF4DD82A)),
+                      //   _buildListItem('Burger', 'assets/17.jpg', '100', Color(0xFFF3E787),
+                      //       Color(0xFFD3BD86)),
+
+                      // ],
+                      ),
+                ),
+
+          // )
         ],
-      ),
+      ) : Center(child: CircularProgressIndicator()),
     );
   }
 
-  _buildListItem(String columnNumber) {
-    return Padding(
-        padding: EdgeInsets.all(15.0),
-        child: Column(
-          children: [
-            if (columnNumber == '1')
-              _buildColumnItem(
-                  'assets/20.png', 'Sweet Pastries', '110', Color(0xFF8E9AC7)),
-            if (columnNumber == '1')
-            SizedBox(height: 10.0),
-            if (columnNumber == '1')
-              _buildColumnItem(
-                  'assets/20.png', 'Sweet Pastries', '50', Color(0xFFF588D1)),
-            if (columnNumber == '2')
-              _buildColumnItem(
-                  'assets/20.png', 'Sweet Pastries', '30', Color(0xFF92D2F0)),
+  // _buildListItem(String columnNumber) {
+  //   return Padding(
+  //       padding: EdgeInsets.all(15.0),
+  //       child: Column(
+  //         children: [
+  //           if (columnNumber == '1')
+  //             _buildColumnItem(
+  //                 'assets/20.png', 'Sweet Pastries', '110', Color(0xFF8E9AC7)),
+  //           if (columnNumber == '1')
+  //           SizedBox(height: 10.0),
+  //           if (columnNumber == '1')
+  //             _buildColumnItem(
+  //                 'assets/20.png', 'Sweet Pastries', '50', Color(0xFFF588D1)),
+  //           if (columnNumber == '2')
+  //             _buildColumnItem(
+  //                 'assets/20.png', 'Sweet Pastries', '30', Color(0xFF92D2F0)),
             
-            if (columnNumber == '2')
-            SizedBox(height: 10.0),
+  //           if (columnNumber == '2')
+  //           SizedBox(height: 10.0),
              
                   
-            if (columnNumber == '2')
-              _buildColumnItem(
-                  'assets/20.png', 'Sweet Pastries', '48', Color(0xFF9FE9BA)),
-          ],
-        ));
-  }
+  //           if (columnNumber == '2')
+  //             _buildColumnItem(
+  //                 'assets/20.png', 'Sweet Pastries', '48', Color(0xFF9FE9BA)),
+  //         ],
+  //       ));
+  // }
 
-  _buildColumnItem(
-      String imgPath, String foodName, String price, Color bgColor) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Container(
-          width: 210.0,
-          child:Row(
-            children: [
-              Container(
-                height: 75,
-                width:75,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(7.0),
-                  color:bgColor,
+  // _buildColumnItem(
+  //     String imgPath, String foodName, String price, Color bgColor) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Container(
+  //         width: 210.0,
+  //         child:Row(
+  //           children: [
+  //             Container(
+  //               height: 75,
+  //               width:75,
+  //               decoration: BoxDecoration(
+  //                 borderRadius: BorderRadius.circular(7.0),
+  //                 color:bgColor,
 
-                ),
-                child: Center(
-                  child:Image.asset(imgPath, height:50.0,width:50.0)
-                )
+  //               ),
+  //               child: Center(
+  //                 child:Image.asset(imgPath, height:50.0,width:50.0)
+  //               )
 
-              ),
-              SizedBox(width:20.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    foodName,
-                     style: GoogleFonts.notoSans(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14,
+  //             ),
+  //             SizedBox(width:20.0),
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: [
+  //                 Text(
+  //                   foodName,
+  //                    style: GoogleFonts.notoSans(
+  //                       fontWeight: FontWeight.w400,
+  //                       fontSize: 14,
                        
-                      ),
-                  ),
+  //                     ),
+  //                 ),
 
-                      Text(
-                      '\GHC' + price,
-                      style: GoogleFonts.lato(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                        color: Color(0xFFF68D7F),
-                      ),
-                    ),
-                ],
-              ),
+  //                     Text(
+  //                     '\GHC' + price,
+  //                     style: GoogleFonts.lato(
+  //                       fontWeight: FontWeight.w600,
+  //                       fontSize: 15,
+  //                       color: Color(0xFFF68D7F),
+  //                     ),
+  //                   ),
+  //               ],
+  //             ),
 
-            ],
-          )
+  //           ],
+  //         )
 
-        )
-      ],
-    );
-  }
+  //       )
+  //     ],
+  //   );
+  // }
 
   adjustQuantity(pressed) {
     switch (pressed) {

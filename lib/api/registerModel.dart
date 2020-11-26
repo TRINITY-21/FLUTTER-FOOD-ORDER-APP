@@ -9,7 +9,9 @@ class RegistersModel {
   String password;
   String id;
   @JsonKey(name: '_id')
-  RegistersModel({this.email, this.id, this.name, this.password});
+  String token;
+
+  RegistersModel({this.email, this.token,this.id, this.name, this.password});
 
   factory RegistersModel.fromJson(Map<String, dynamic> json) =>
       _$RegistersModelFromJson(json);

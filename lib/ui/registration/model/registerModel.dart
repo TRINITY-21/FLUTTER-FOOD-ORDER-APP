@@ -1,22 +1,28 @@
 import 'dart:convert';
+import 'package:ange/api/currentUserModel.dart';
 import 'package:ange/api/registerModel.dart';
 import 'package:ange/ui/networkHandler/network_handler.dart';
 import 'package:ange/ui/registration/model/validationItems.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class RegisterModel with ChangeNotifier {
   ValidationItem _username = ValidationItem(message: null, error: null);
   ValidationItem _email = ValidationItem(message: null, error: null);
   ValidationItem _password = ValidationItem(message: null, error: null);
-
+  String _token;
   RegistersModel _register = RegistersModel();
   NetworkHandler networkHandler = NetworkHandler();
+  FlutterSecureStorage _storage = FlutterSecureStorage();
+  CurrentUserModel currentUserModel = CurrentUserModel();
 
   /// getters
 
   ValidationItem get username => _username;
   ValidationItem get email => _email;
   ValidationItem get password => _password;
+
+  String get token => _token;
 
   bool get isValid {
     if (_username.message != null &&
@@ -74,19 +80,27 @@ class RegisterModel with ChangeNotifier {
     print(password.message);
 
     print(res);
-  } 
-  
-  login() async {
-    _register = RegistersModel(
-        email: email.message,
-        password: password.message);
+  }
 
-    final res = networkHandler.post(
+  login() async {
+    _register =
+        RegistersModel(email: email.message, password: password.message);
+
+    final res = await networkHandler.post(
         '/api/users/login', json.encode(_register.toJson()));
-    
+
+    Map<String, dynamic> output = json.decode(res.body);
+    if (output['loginSuccess']) {
+      _token = output['user']['token'];
+      await _storage.write(key: "token", value: _token);
+    }
+
+    print(_token);
+    print(res);
+    print(output);
     print(email.message);
     print(password.message);
-
-    print(res);
   }
+
+
 }
