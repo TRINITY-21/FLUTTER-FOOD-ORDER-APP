@@ -12,9 +12,14 @@ ListModel _$ListModelFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : FoodModel.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    books: (json['books'] as List)
+        ?.map((e) =>
+            e == null ? null : FoodModel.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
   );
 }
 
 Map<String, dynamic> _$ListModelToJson(ListModel instance) => <String, dynamic>{
       'book': instance.book,
+      'books': instance.books,
     };

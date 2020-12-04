@@ -5,6 +5,7 @@ import 'package:ange/api/listModel.dart';
 import 'package:ange/ui/detailsPage.dart';
 import 'package:ange/ui/foodTabs.dart';
 import 'package:ange/ui/networkHandler/network_handler.dart';
+import 'package:ange/ui/search.dart';
 import 'package:ange/ui/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -65,24 +66,32 @@ class _HomePageState extends State<HomePage>
                           },
                           child: Icon(Icons.menu, color: Colors.black),
                         ),
-                        Container(
-                          height: 40.0,
-                          width: 50.0,
-                          decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.3),
-                                  blurRadius: 6.0,
-                                  spreadRadius: 4.0,
-                                  offset: Offset(0.0, 3.0),
-                                ),
-                              ],
-                              color: Color(0xFFC6E7FE),
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                  image:
-                                      AssetImage('assets/man-156584__340.webp'),
-                                  fit: BoxFit.contain)),
+                        InkWell(
+                           onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchFood()));
+                          },
+
+                          
+                          child: Container(
+                            height: 40.0,
+                            width: 50.0,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    blurRadius: 6.0,
+                                    spreadRadius: 4.0,
+                                    offset: Offset(0.0, 3.0),
+                                  ),
+                                ],
+                                color: Color(0xFFC6E7FE),
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/man-156584__340.webp'),
+                                    fit: BoxFit.contain)),
+                          ),
                         )
                       ],
                     )),
@@ -120,6 +129,13 @@ class _HomePageState extends State<HomePage>
                       color: Colors.grey.withOpacity(0.1),
                     ),
                     child: TextFormField(
+                      onTap:(){
+
+                      },
+
+                      // onChanged: (value) {
+                          // Search(searchValue:value);
+                      // },
                       decoration: InputDecoration(
                         hintText: "Search Recipes",
                         hintStyle: GoogleFonts.notoSans(
@@ -149,6 +165,7 @@ class _HomePageState extends State<HomePage>
                       itemCount: fmodel.book.length,
                       itemBuilder: (BuildContext context, index) {
                         FoodModel _food = fmodel.book[index];
+
                         return Padding(
                             padding: EdgeInsets.only(left: 15),
                             child: InkWell(
@@ -158,10 +175,11 @@ class _HomePageState extends State<HomePage>
                                       MaterialPageRoute(
                                           builder: (context) => DetailsPage(
                                               imgPath: _food.filePath,
+                                              fid: _food.id,
                                               foodName: _food.title,
                                               pricePerItem:
                                                   _food.price.toString(),
-                                              heroTag: _food.title)));
+                                              heroTag: _food.id)));
                                 },
                                 child: Container(
                                     height: 130.0,
@@ -175,7 +193,7 @@ class _HomePageState extends State<HomePage>
                                           offset: Offset(0.0, 3.0),
                                         ),
                                       ],
-                                      color: Color(0xFF02422F),
+                                      color: Color(0xFF3C7765),
                                       borderRadius: BorderRadius.circular(15),
                                     ),
                                     child: Column(
@@ -183,19 +201,17 @@ class _HomePageState extends State<HomePage>
                                           MainAxisAlignment.center,
                                       children: [
                                         Hero(
-                                          tag: _food.title,
-                                          child: Container(
-                                              height: 75.0,
-                                              width: 75.0,
-                                              decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                shape: BoxShape.circle,
-                                              ),
-                                              child: Center(
-                                                  child: CircleAvatar(
-                                                      backgroundImage:networkHandler.getImage(_food.filePath)
-                                              )))),
-                                        
+                                            tag: _food.price,
+                                            child: Container(
+                                                height: 75.0,
+                                                width: 75.0,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: Center(
+                                                    child: Image.asset(
+                                                        'assets/18.jpg')))),
                                         SizedBox(height: 15.0),
                                         Text(
                                           _food.title,
@@ -215,22 +231,7 @@ class _HomePageState extends State<HomePage>
                                         ),
                                       ],
                                     ))));
-                      }
-
-                      //  children: [
-                      //   _buildListItem('Hamburg', 'assets/19.jpg', '21',
-                      //       Color(0xFFC6E7FE), Color(0xFF04243B)),
-                      //   _buildListItem('Chips', 'assets/21.png', '30', Color(0xFFDCE964),
-                      //       Color(0xFF6A8CAA)),
-                      //   _buildListItem('Donuts', 'assets/20.png', '10', Color(0xFFD7FADA),
-                      //       Color(0xFF56CC7E)),
-                      //  _buildListItem('Pear', 'assets/19.jpg', '10', Color(0xFFADFF4F),
-                      //       Color(0xFF4DD82A)),
-                      //   _buildListItem('Burger', 'assets/17.jpg', '100', Color(0xFFF3E787),
-                      //       Color(0xFFD3BD86)),
-
-                      // ],
-                      ),
+                      }),
                 ),
 
                 //SizedBox(height: 10.0,),
@@ -282,70 +283,70 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  _buildListItem(String foodName, String imgPath, String price, Color bgColor,
-      Color textColor) {
-    return Padding(
-        padding: EdgeInsets.only(left: 15),
-        child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailsPage(
-                          imgPath: imgPath,
-                          foodName: foodName,
-                          pricePerItem: price,
-                          heroTag: foodName)));
-            },
-            child: Container(
-                height: 130.0,
-                width: 130.0,
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.3),
-                      blurRadius: 6.0,
-                      spreadRadius: 4.0,
-                      offset: Offset(0.0, 3.0),
-                    ),
-                  ],
-                  color: bgColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Hero(
-                      tag: foodName,
-                      child: Container(
-                          height: 75.0,
-                          width: 75.0,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Center(
-                              child: Image.asset(imgPath,
-                                  height: 50.0, width: 150.0))),
-                    ),
-                    SizedBox(height: 15.0),
-                    Text(
-                      foodName,
-                      style: GoogleFonts.notoSans(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 17,
-                        color: textColor,
-                      ),
-                    ),
-                    Text(
-                      '\GHC' + price,
-                      style: GoogleFonts.notoSans(
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                        color: textColor,
-                      ),
-                    ),
-                  ],
-                ))));
-  }
+  // _buildListItem(String foodName, String imgPath, String price, Color bgColor,
+  //     Color textColor) {
+  //   return Padding(
+  //       padding: EdgeInsets.only(left: 15),
+  //       child: InkWell(
+  //           onTap: () {
+  //             Navigator.push(
+  //                 context,
+  //                 MaterialPageRoute(
+  //                     builder: (context) => DetailsPage(
+  //                         imgPath: imgPath,
+  //                         foodName: foodName,
+  //                         pricePerItem: price,
+  //                         heroTag: foodName)));
+  //           },
+  //           child: Container(
+  //               height: 130.0,
+  //               width: 130.0,
+  //               decoration: BoxDecoration(
+  //                 boxShadow: [
+  //                   BoxShadow(
+  //                     color: Colors.grey.withOpacity(0.3),
+  //                     blurRadius: 6.0,
+  //                     spreadRadius: 4.0,
+  //                     offset: Offset(0.0, 3.0),
+  //                   ),
+  //                 ],
+  //                 color: bgColor,
+  //                 borderRadius: BorderRadius.circular(15),
+  //               ),
+  //               child: Column(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: [
+  //                   Hero(
+  //                     tag: foodName,
+  //                     child: Container(
+  //                         height: 75.0,
+  //                         width: 75.0,
+  //                         decoration: BoxDecoration(
+  //                           color: Colors.white,
+  //                           shape: BoxShape.circle,
+  //                         ),
+  //                         child: Center(
+  //                             child: Image.asset('assets/18.jpg',
+  //                                 height: 50.0, width: 150.0))),
+  //                   ),
+  //                   SizedBox(height: 15.0),
+  //                   Text(
+  //                     foodName,
+  //                     style: GoogleFonts.notoSans(
+  //                       fontWeight: FontWeight.w800,
+  //                       fontSize: 17,
+  //                       color: textColor,
+  //                     ),
+  //                   ),
+  //                   Text(
+  //                     '\GHC' + price,
+  //                     style: GoogleFonts.notoSans(
+  //                       fontWeight: FontWeight.w800,
+  //                       fontSize: 12,
+  //                       color: textColor,
+  //                     ),
+  //                   ),
+  //                 ],
+  //               ))));
+  // }
 }

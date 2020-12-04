@@ -7,9 +7,10 @@ class FoodModel {
   String title;
   int price;
   String filePath;
-  String id;
+
   @JsonKey(name: '_id')
-  String views;
+  String id;
+  int views;
 
   FoodModel({this.filePath, this.price,this.id, this.title, this.views});
 

@@ -49,8 +49,8 @@ class NetworkHandler {
     return baseUrl + url;
   }
 
-    NetworkImage getImage(String filePath) {
-    String url = formatter('$filePath');
+  NetworkImage getImage(String filePath) {
+    String url = formatter('//$filePath');
     return NetworkImage(url);
   }
 }

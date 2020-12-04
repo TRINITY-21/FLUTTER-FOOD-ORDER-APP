@@ -7,8 +7,9 @@ class RegistersModel {
   String name;
   String email;
   String password;
-  String id;
+ 
   @JsonKey(name: '_id')
+  String id;
   String token;
 
   RegistersModel({this.email, this.token,this.id, this.name, this.password});

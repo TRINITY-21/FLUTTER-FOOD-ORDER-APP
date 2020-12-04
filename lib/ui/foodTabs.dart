@@ -86,9 +86,9 @@ class _FoodTabState extends State<FoodTab> {
                                               foodName: food.title,
                                               pricePerItem:
                                                   food.price.toString(),
-                                              heroTag: food.title)));
+                                              heroTag: food.id)));
                                 },
-                          child: Image.network(food.filePath, height: 50.0, width: 50.0),
+                          child: Image.asset('assets/18.jpg', height: 120.0, width: 70.0),
                         ),
                       )),
                   SizedBox(

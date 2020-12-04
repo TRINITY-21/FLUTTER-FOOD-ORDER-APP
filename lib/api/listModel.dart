@@ -7,8 +7,11 @@ part 'listModel.g.dart';
 class ListModel {
 
   List<FoodModel> book;
+  List<FoodModel> books;
+  
+  //  List<FoodModel> book;
 
-  ListModel({this.book});
+  ListModel({this.book, this.books});
 
   factory ListModel.fromJson(Map<String, dynamic> json) =>
       _$ListModelFromJson(json);
