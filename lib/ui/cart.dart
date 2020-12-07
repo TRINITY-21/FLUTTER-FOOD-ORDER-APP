@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'package:ange/api/cartItems.dart';
 import 'package:ange/api/cartModel.dart';
 import 'package:ange/api/foodModel.dart';
-import 'package:ange/api/listModel.dart';
+
 import 'package:ange/api/registerModel.dart';
-import 'package:ange/ui/detailsPage.dart';
+
 import 'package:ange/ui/networkHandler/network_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -80,9 +80,13 @@ class _CartState extends State<Cart> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
         appBar: AppBar(
-          title: Text("Cart Items"),
+          backgroundColor: Colors.teal,
+          title: Text("Cart Items", 
+          style:TextStyle(color: Colors.white,)
+        ),
         ),
         body: isLoaded == true
             ? ListView.builder(

@@ -17,6 +17,7 @@ CartModel _$CartModelFromJson(Map<String, dynamic> json) {
     subcribed: json['subcribed'] as bool,
     books: json['books'] as String,
     onlineUser: json['onlineUser'] as String,
+    search: json['search'] as String,
   )..doc = (json['doc'] as List)
       ?.map((e) =>
           e == null ? null : CartItems.fromJson(e as Map<String, dynamic>))
@@ -33,5 +34,6 @@ Map<String, dynamic> _$CartModelToJson(CartModel instance) => <String, dynamic>{
       'bookId':instance.bookId,
       'subscribeNumber': instance.subscribeNumber,
       'userFrom':instance.userFrom,
-      'movieId':instance.movieId
+      'movieId':instance.movieId,
+      'search':instance.search
     };

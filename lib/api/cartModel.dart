@@ -17,11 +17,12 @@ class CartModel {
   String userFrom;
   bool subcribed;
   int subscribeNumber;
-  
+  String search;
 
   CartModel(
       {this.id,
       this.subscribeNumber,
+      this.search,
       this.cartNum,
       this.userFrom,
       this.movieId,

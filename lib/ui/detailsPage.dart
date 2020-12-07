@@ -5,6 +5,7 @@ import 'package:ange/api/listModel.dart';
 import 'package:ange/api/registerModel.dart';
 import 'package:ange/ui/cart.dart';
 import 'package:ange/ui/networkHandler/network_handler.dart';
+import 'package:ange/ui/user_profile.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -196,7 +197,14 @@ class _DetailsPageState extends State<DetailsPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.menu, color: Colors.black),
+                         GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => UserProfilePage()));
+                          },
+                          child: Icon(Icons.menu, color: Colors.black),
+                        ),
+                        
                         Stack(
                           children: [
                             Container(

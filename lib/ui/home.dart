@@ -66,33 +66,26 @@ class _HomePageState extends State<HomePage>
                           },
                           child: Icon(Icons.menu, color: Colors.black),
                         ),
-                        InkWell(
-                           onTap: () {
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => SearchFood()));
-                          },
-
-                          
-                          child: Container(
-                            height: 40.0,
-                            width: 50.0,
-                            decoration: BoxDecoration(
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.3),
-                                    blurRadius: 6.0,
-                                    spreadRadius: 4.0,
-                                    offset: Offset(0.0, 3.0),
-                                  ),
-                                ],
-                                color: Color(0xFFC6E7FE),
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                    image:
-                                        AssetImage('assets/man-156584__340.webp'),
-                                    fit: BoxFit.contain)),
-                          ),
-                        )
+                        Container(
+                          height: 40.0,
+                          width: 50.0,
+                          decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.3),
+                                  blurRadius: 6.0,
+                                  spreadRadius: 4.0,
+                                  offset: Offset(0.0, 3.0),
+                                ),
+                              ],
+                              color: Color(0xFFC6E7FE),
+                              shape: BoxShape.circle,
+                              image: DecorationImage(
+                                  image:
+                                      AssetImage('assets/logo.png'),
+                                  fit: BoxFit.contain)),
+                        ),
+                        
                       ],
                     )),
                 Padding(
@@ -128,24 +121,34 @@ class _HomePageState extends State<HomePage>
                       borderRadius: BorderRadius.circular(30),
                       color: Colors.grey.withOpacity(0.1),
                     ),
-                    child: TextFormField(
-                      onTap:(){
+                    child:Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child:  GestureDetector(
+                          onTap: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => SearchFood()));
+                          },
+                          child: Icon(Icons.search)),
 
-                      },
+                          
+                        ),
 
-                      // onChanged: (value) {
-                          // Search(searchValue:value);
-                      // },
-                      decoration: InputDecoration(
-                        hintText: "Search Recipes",
-                        hintStyle: GoogleFonts.notoSans(
-                            fontWeight: FontWeight.w300, fontSize: 14),
-                        prefixIcon: Icon(Icons.search,
-                            color: Colors.grey.withOpacity(0.5)),
-                        border: InputBorder.none,
-                        fillColor: Colors.grey.withOpacity(0.5),
-                      ),
-                    ),
+                    // child: TextFormField(
+                    //   // onTap: () {},
+                    //   // onChanged: (value) {
+                    //   //   SearchFood(searchValue:value);
+                    //   //   print(value);
+                    //   // },
+                    //   decoration: InputDecoration(
+                    //     hintText: "Search Recipes",
+                    //     hintStyle: GoogleFonts.notoSans(
+                    //         fontWeight: FontWeight.w300, fontSize: 14),
+                    //     prefixIcon: Icon(Icons.search,
+                    //         color: Colors.grey.withOpacity(0.5)),
+                    //     border: InputBorder.none,
+                    //     fillColor: Colors.grey.withOpacity(0.5),
+                    //   ),
+                    // ),
                   ),
                 ),
                 SizedBox(height: 10.0),
