@@ -2,7 +2,7 @@
 
 A new Flutter project.
 
-#server used https://github.com/TRINITY-21/MERN_BOOKSTORE_APP
+# server used https://github.com/TRINITY-21/MERN_BOOKSTORE_APP
 ![alt text](https://github.com/TRINITY-21/FLUTTER_UI_CHALLENGE/blob/master/Screenshot_20200925-085948.jpg)
 
 ![alt text](https://github.com/TRINITY-21/FLUTTER_UI_CHALLENGE/blob/master/Screenshot_20200925-085958.jpg)
