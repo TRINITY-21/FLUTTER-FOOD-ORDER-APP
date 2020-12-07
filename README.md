@@ -1,4 +1,4 @@
-# FLUTTER UI CHALLENGE
+# FLUTTER FOOD ORDER APP
 
 A new Flutter project.
 
